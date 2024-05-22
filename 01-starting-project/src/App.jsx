@@ -1,33 +1,46 @@
-const reactDescriptions = ['Fundamental', 'Crucial', 'Core']; 
+import { useState } from 'react';
 
-function genRandomInt(max) {
-  return Math.floor(Math.random() * (max + 1));
-}
+import { CORE_CONCEPTS } from './data.js';
+import Header from './components/Header.jsx';
+import CoreConcept from './components/CoreConcept.jsx';
+import TabButton from './components/TabButton.jsx';
 
-function Header() {
-  const descrition = reactDescriptions[genRandomInt(2)]
-  return (
-    <div>
-      <header>
-        <h1>React Essentials</h1>
-        <p>
-           {descrition} React concepts you will need for almost any app you are
-          going to build!
-        </p>
-      </header>
-      <main>
-        <h2>Time to get started!</h2>
-      </main>
-    </div>
-  );                       
-}
 
 function App() {
+  const [ selectedTopic, setSelectedTopic ] = useState('Please click a button');
+
+  function handleSelect(selectedButton) {
+    setSelectedTopic(selectedButton);
+    console.log(selectedTopic);
+}
+
   return (
     <div>
       <Header />
       <main>
-        <h2>Are you ready!</h2>
+        <section id='core-concepts'>
+        <h2>Core Concepts</h2>
+        <ul>
+          <CoreConcept 
+           title={CORE_CONCEPTS[0].title}
+           description={CORE_CONCEPTS[0].description}
+           image={CORE_CONCEPTS[0].image} 
+           />
+           <CoreConcept {...CORE_CONCEPTS[1]} />
+           <CoreConcept {...CORE_CONCEPTS[2]} />
+           <CoreConcept {...CORE_CONCEPTS[3]} />
+        </ul>
+        </section>
+        <section id='examples'>
+          <h2>Examples</h2>
+          <menu>
+            <TabButton onSelect={() => handleSelect('component')}>Components</TabButton>
+            <TabButton onSelect={() => handleSelect('jsx')}>JSX</TabButton>
+            <TabButton onSelect={() => handleSelect('props')}>Props</TabButton>
+            <TabButton onSelect={() => handleSelect('state')}>State</TabButton>
+          </menu>
+          {selectedTopic}
+        </section>
       </main>
     </div>
   );
