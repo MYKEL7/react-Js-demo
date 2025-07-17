@@ -1,35 +1,40 @@
-import { useState } from "react";
-
- const initialGameBoard = [
+const initialGameBoard = [
     [null, null, null],
     [null, null, null],
     [null, null, null],
  ];
  
- export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
-    const [gameBord, setGameBord] = useState(initialGameBoard);
+ export default function GameBoard({ onSelectSquare, turns }) {
+    let gameBoard = initialGameBoard;
 
-    function handleSelectSquare(rowIndex, colIndex) {
-        setGameBord((prevGameBoard) => {
-            const updateBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-            updateBoard[rowIndex] [colIndex] = activePlayerSymbol;
-            return updateBoard
-        });
+    for (const turn of turns) {
+        const { square, player } = turn;
+        const { row, col } = square;
 
-        onSelectSquare();
+        gameBoard[row][col] = player;
     }
+    // const [gameBord, setGameBord] = useState(initialGameBoard);
+
+    // function handleSelectSquare(rowIndex, colIndex) {
+    //     setGameBord((prevGameBoard) => {
+    //         const updateBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
+    //         updateBoard[rowIndex] [colIndex] = activePlayerSymbol;
+    //         return updateBoard
+    //     });
+
+    //     onSelectSquare();
 
     return (
         <ol id="game-board">
-            {gameBord.map((row, rowIndex) => <li key={rowIndex}>
+            {gameBoard.map((row, rowIndex) => <li key={rowIndex}>
                 <ol>
-                   {row.map((playerSymbol, coIndex) => (
-                    <li key={coIndex}>
-                        <button onClick={() => handleSelectSquare(rowIndex, coIndex)}>{playerSymbol}</button>
+                   {row.map((playerSymbol, colIndex) => (
+                    <li key={colIndex}>
+                        <button onClick={() => onSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
                         </li>
                     ))} 
                 </ol>
             </li>)}
         </ol>
     );
- }
+}
